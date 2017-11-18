@@ -1,0 +1,292 @@
+html, body {
+    background-color:#333;
+    font-family:'Josefin Sans', sans-serif;
+    height:100%;
+    margin:0;
+    min-height:100%;
+    padding:0;
+    position:relative;
+    width:100%;
+}
+h1 {
+    bottom:calc(50% + 50px);
+    height:100px;
+    right:calc(50% + 310px);
+    position:absolute;
+    width:170px;
+    z-index:8;
+}
+
+#gameWrapper {
+    background-color:#000;
+    height:400px;
+    left:50%;
+    margin:-200px -300px;
+    position:absolute;
+    top:50%;
+    width:600px;
+}
+
+#gameWrapper canvas {
+    
+}
+
+#coins {
+    color:rgba(24,221,0,1);
+    height:50px;
+    left:50%;
+    margin:-100px;
+    margin-top:100px;
+    position:absolute;
+    text-align:right;
+    top:50%;
+    width:200px;
+}
+#healthWrapper {
+    background-color:#666;
+    height:4px;
+    left:50%;
+    margin:-100px;
+    margin-top:106px;
+    position:absolute;
+    text-align:right;
+    top:50%;
+    width:100px;
+}
+#healthBar {
+    background-color:rgba(24,221,0,1);
+    height:100%;
+    transition:width 300ms;
+    width:0%;
+}
+
+#UI #inGame {
+    background-color:transparent;
+    height:400px;
+    left:50%;
+    margin:-200px -300px;
+    pointer-events: none;
+    position:absolute;
+    top:50%;
+    width:600px;
+}
+
+#time {
+    position:absolute;
+    left:20px;
+    text-align:left;
+    top:20px;
+    width:200px;
+}
+#score {
+    position:absolute;
+    right:20px;
+    text-align:right;
+    top:20px;
+    width:200px;
+}
+
+#killScreen {
+    background-color:#333;
+    color: rgba(24,221,0,1);
+    height:0;
+    left: 50%;
+    margin: -100px;
+    margin-top: -50px;
+    overflow:hidden;
+    position: absolute;
+    text-align: center;
+    transition:height 300ms;
+    top: 50%;
+    width: 200px;
+}
+#killScreen button {
+    background-color:rgba(47,181,243,1);
+    border-radius:0;
+    border-width:0;
+    color:#000;
+    cursor:pointer;
+    font-weight: bold;
+    padding: 5px 20px;
+}
+#killScreen button:hover {
+    text-decoration:underline;
+}
+body[data-kill-screen="true"] #killScreen {
+    height: 100px;
+}
+
+#dPad {
+    background-color:gray;
+    border:30px solid gray;
+    border-radius:10px;
+    bottom:calc(50% - 150px);
+    height:10px;
+    right:calc(50% + 350px);
+    position:absolute;
+    width:10px;
+    z-index:8;
+}
+/*body[data-key-pressed="up"] #dPad {
+    border-top-color:rgba(47,181,243,1);
+}
+body[data-key-pressed="right"] #dPad {
+    border-right-color:rgba(47,181,243,1);
+}
+body[data-key-pressed="down"] #dPad {
+    border-bottom-color:rgba(47,181,243,1);
+}
+body[data-key-pressed="left"] #dPad {
+    border-left-color:rgba(47,181,243,1);
+}*/
+
+#dPad ul {
+    list-style-type:none;
+    margin:0;
+    padding:0;
+    position:relative;
+}
+#dPad ul::before {
+    background-color:darkslategray;
+    border-radius:2px;
+    color:transparent;
+    content:" ";
+    height:70px;
+    left:-10px;
+    position:absolute;
+    top:-30px;
+    width:30px;
+}
+#dPad ul::after {
+    background-color:darkslategray;
+    border-radius:2px;
+    color:transparent;
+    content:" ";
+    height:30px;
+    left:-30px;
+    position:absolute;
+    top:-10px;
+    width:70px;
+}
+#dPad li {
+    background-color:rgba(0,0,0,0.5);
+    border-radius:50%;
+    height:20px;
+    list-style-type:none;
+    margin:0;
+    padding:0;
+    position:absolute;
+    transition:background-color 200ms;
+    width:20px;
+    z-index:10;
+}
+#dpad-up {
+    top:-28px;
+    left:-5px;
+}
+#dpad-right {
+    right:-28px;
+    top:-5px;
+}
+#dpad-down {
+    bottom:-38px;
+    left:-5px;
+}
+#dpad-left {
+    left:-28px;
+    top:-5px;
+}
+body[data-key-pressed="up"] #dpad-up {
+    background-color:rgba(0,0,0,1);
+}
+body[data-key-pressed="right"] #dpad-right {
+    background-color:rgba(0,0,0,1);
+}
+body[data-key-pressed="down"] #dpad-down {
+    background-color:rgba(0,0,0,1);
+}
+body[data-key-pressed="left"] #dpad-left {
+    background-color:rgba(0,0,0,1);
+}
+
+footer {
+    bottom:0;
+    margin:0;
+    padding:0;
+    position:absolute;
+    right:0;
+}
+footer p {
+    margin:5px;
+    padding:5px;
+}
+footer p a {
+    color:aquamarine;
+    color:rgba(47,181,243,1);
+}
+
+
+/*
+ * Stage Elements
+ */
+/*** Bear States ***/
+.bear-tile {
+    transition:fill 200ms ease;
+}
+.bear-tile[data-state="active"] {
+    fill: rgba(0,0,0,0.99) !important;
+}
+.bear-tile[data-state="inactive"] {
+    fill: rgba(0,0,0,0.01) !important;
+}
+.bear-tile[data-state="highlight"] {
+    fill: rgba(0,0,0,0.03) !important;
+}
+/*** Rabbit States ***/
+.rabbit-tile {
+    transition:fill 200ms ease;
+}
+.rabbit-tile[data-state="active"] {
+    fill: rgba(0,0,0,0.99) !important;
+}
+.rabbit-tile[data-state="inactive"] {
+    fill: rgba(0,0,0,0.01) !important;
+}
+.rabbit-tile[data-state="nextTarget"] {
+    fill: rgba(0,0,0,0.03) !important;
+}
+/*** Hunter States ***/
+.hunter-tile {
+    transition:fill 200ms ease;
+}
+.hunter-tile[data-state="active"] path,
+.hunter-tile[data-state="active"] circle {
+    fill: rgba(0,0,0,0.99) !important;
+}
+.hunter-tile[data-state="active"] .crosshairs-inner {
+    fill: rgba(0,0,0,0.03) !important;
+}
+.hunter-tile[data-state="active"].aiming .crosshairs-inner {
+    fill: rgba(0,0,0,0.99) !important;
+}
+.hunter-tile[data-state="inactive"] path,
+.hunter-tile[data-state="inactive"] circle {
+    fill: rgba(0,0,0,0.01) !important;
+}
+.hunter-tile[data-state="nextTarget"] path,
+.hunter-tile[data-state="nextTarget"] circle {
+    fill: rgba(0,0,0,0.03) !important;
+}
+/*** Whiskey States ***/
+.whiskey-tile {
+    transition:fill 200ms ease;
+}
+.whiskey-tile[data-state="active"] {
+    fill: rgba(0,0,0,0.99) !important;
+}
+.whiskey-tile[data-state="inactive"] {
+    fill: rgba(0,0,0,0.01) !important;
+}
+.whiskey-tile[data-state="nextTarget"] {
+    fill: rgba(0,0,0,0.03) !important;
+}
