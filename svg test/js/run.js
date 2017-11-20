@@ -2,7 +2,7 @@
  * Vars
  */
 var game, keys,
-    player;
+    player, und;
 
 /*
  * Key presses
@@ -13,8 +13,8 @@ document.body.addEventListener("keydown", function (e) {
 document.body.addEventListener("keyup", function (e) {
     keys.release (e.keyCode);
 });
-document.getElementById ("restart").addEventListener("click", function (e) {
-    game.restart ();
+document.getElementById ("toggle-guide").addEventListener ("click", function (e) {
+    document.body.classList.toggle ("guide-open");
 });
 
 /*
@@ -30,12 +30,6 @@ document.getElementById ("restart").addEventListener("click", function (e) {
     player.init ();
     
     //game.loadSVG ("scene.svg");
-    
-    
-    /*
-    game.spawnCoin ();
-    game.spawnEnemy ();
-    */
     
     //Draw ();
     GameLoop ();
@@ -58,16 +52,9 @@ function GameLoop () {
             player.move (keys.current);
         }
         
-        /*
-            Updates
-        */
-        
+        /// Reset the turn variable
         game.turn.resetNewTurn ();
         
-        /*
-            Execute Draws
-        */
-        //Draw ();
     }
     
     //console.log (keys.current);

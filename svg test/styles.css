@@ -231,6 +231,7 @@ footer p a {
  */
 /*** Bear States ***/
 .bear-tile {
+    fill: rgba(0,0,0,0.01) !important;
     transition:fill 200ms ease;
 }
 .bear-tile[data-state="active"] {
@@ -244,6 +245,7 @@ footer p a {
 }
 /*** Rabbit States ***/
 .rabbit-tile {
+    fill: rgba(0,0,0,0.01) !important;
     transition:fill 200ms ease;
 }
 .rabbit-tile[data-state="active"] {
@@ -257,6 +259,7 @@ footer p a {
 }
 /*** Hunter States ***/
 .hunter-tile {
+    fill: rgba(0,0,0,0.01) !important;
     transition:fill 200ms ease;
 }
 .hunter-tile[data-state="active"] path,
@@ -279,6 +282,7 @@ footer p a {
 }
 /*** Whiskey States ***/
 .whiskey-tile {
+    fill: rgba(0,0,0,0.01) !important;
     transition:fill 200ms ease;
 }
 .whiskey-tile[data-state="active"] {

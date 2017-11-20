@@ -26,7 +26,7 @@ function Rabbit (xStart, yStart) {
             
             this.x = tile.position.x;
             this.y = tile.position.y;
-            //activate new tile
+            // activate new tile
             tile.changeState ("active");
             
             // highlight next tile
@@ -34,13 +34,20 @@ function Rabbit (xStart, yStart) {
         }
     };
     
+    obj.perish = function () {
+        // deactivate new tile
+        this.position.tile.changeState ("inactive");
+    };
+    
     obj.init = function (tile) {
-        console.log (tile);
-        console.log ("Set this tile to active and all that!");
+        //console.log (tile);
+        //console.log ("Set this tile to active and all that!");
         this.position.tile = tile;
         this.position.set (tile);
     };
     obj.update = function () {
+        
+        // Update rabbit movement
         
     };
     

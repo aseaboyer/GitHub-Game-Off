@@ -52,6 +52,21 @@ function Player () {
                     }
                 
                 }
+                
+                // check for rabbits
+                var rabbitOnTile = game.rabbits.findRabbitId (this.x, this.y);
+                if (rabbitOnTile != null) {
+                    console.log ("Found a rabbit! @ " + rabbitOnTile);
+                    game.rabbits.removeRabbitById (rabbitOnTile);
+                    game.scorePoints ("rabbit");
+                }
+                
+                // check for whiskey
+                /*
+                var whiskeyOnTile = game.whiskey.atLocation (this.x, this.y);
+                if (whiskeyOnTile) {
+                    game.whiskey.removeBottle ();
+                }*/
             }
         },
         tiles: [],

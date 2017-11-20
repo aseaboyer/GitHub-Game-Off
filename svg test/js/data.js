@@ -34,4 +34,14 @@ var gameData = {
     whiskey: {
         frequency: 10
     },
+    points: [
+        {
+            type: "rabbit",
+            value: 10
+        },
+        {
+            type: "hunter",
+            value: 100
+        }
+    ]
 }
