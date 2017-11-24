@@ -35,6 +35,22 @@ function Game (gameElement, turnSpeed) {
     obj.gameElement = gameElement;
     obj.scoreDisplay = document.getElementById ("score-count");
     
+    obj.findHunterTarget = function (rowNum) {
+        // check player
+        if (player.position.y === rowNum) {
+            
+        }
+        
+        // check all rabbits 
+        for (var i = 0; i < this.rabbits.rabbits.length; i++) {
+            if (this.rabbits.rabbits [i].position.y === rowNum) {
+                return true;
+            }
+        }
+        
+        return false; // fail out
+    };
+    
     obj.init = function () {
         this.turn.current = 0;
         
@@ -44,11 +60,13 @@ function Game (gameElement, turnSpeed) {
         
         this.rabbits.init (0);
         this.whiskey.init (0);
+        this.hunters.init (0);
     };
     obj.update = function () {
         this.turn.update ();
         this.rabbits.update (this.turn.current);
         this.whiskey.update (this.turn.current);
+        this.hunters.update (this.turn.current);
         
         // if the bottle is in play
         if (this.whiskey.bottle !== null) {
@@ -146,6 +164,43 @@ function Game (gameElement, turnSpeed) {
         init: function (turnNumber) {
             this.scheduleNext (0);
         },
+        update: function (turnNumber) {
+            if (turnNumber >= this.nextSpawn &&
+               this.hunters.length < this.data.maxCount) {
+                var newHunter = this.spawn ();
+                //console.log (this.hunters.length < this.data.maxCount);
+                //console.log (this.hunters.length + " < " + this.data.maxCount);
+                console.log (newHunter);
+                
+                if (newHunter != null) {
+                    this.scheduleNext (turnNumber);
+                    this.hunters.push (newHunter);
+                }
+            }
+        },
+        spawn: function () {
+            var start = randomInt (0, this.tiles.length-1);
+            var x = this.tiles [start].position.x,
+                y = this.tiles [start].position.y,
+                validStart = true;
+            
+            // check if a hunter exists here already!
+            for (var i = 0; i < this.hunters.length; i++) {
+                var pos = this.hunters [i].position;
+                console.log (pos.row + "===" + y);
+                if (pos.row === y) {
+                    validStart = false;
+                }
+            }
+            
+            if (validStart) {
+                var newHunter = new Hunter (this.tiles [start]);
+                return newHunter;
+            }
+            
+            // invalid - don't create
+            return null;
+        },
         removeAll: function (turnNumber) {
             for (var i = 0; i < this.hunters.length; i++) {
                 this.hunters [i].perish ();
@@ -157,6 +212,7 @@ function Game (gameElement, turnSpeed) {
         },
         buildTiles: function (className) {
              var tiles = document.getElementsByClassName (className);
+            this.tiles.length = 0;
             //console.log (tiles);
             if (tiles.length > 0) {
                 for (var i = 0; i < tiles.length; i++) {
@@ -203,6 +259,8 @@ function Game (gameElement, turnSpeed) {
         },
         buildTiles: function (className) {
              var tiles = document.getElementsByClassName (className);
+            this.tiles.length = 0;
+            
             //console.log (tiles);
             if (tiles.length > 0) {
                 for (var i = 0; i < tiles.length; i++) {
@@ -299,6 +357,8 @@ function Game (gameElement, turnSpeed) {
         },
         buildTiles: function (className) {
              var tiles = document.getElementsByClassName (className);
+            this.tiles.length = 0;
+            
             //console.log (tiles);
             if (tiles.length > 0) {
                 for (var i = 0; i < tiles.length; i++) {

@@ -32,7 +32,7 @@ var gameData = {
         maxCount: 2
     },
     whiskey: {
-        frequency: 10
+        frequency: 25
     },
     points: [
         {
