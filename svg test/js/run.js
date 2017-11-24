@@ -17,6 +17,16 @@ document.getElementById ("toggle-guide").addEventListener ("click", function (e)
     document.body.classList.toggle ("guide-open");
 });
 
+var dbuttons = document.getElementsByClassName ("dbutton");
+for (var i = 0; i < dbuttons.length; i++) {
+    dbuttons [i].addEventListener("mousedown", function (e) {
+        keys.press (e.target.dataset.keyValue);
+    });
+    dbuttons [i].addEventListener("mouseup", function (e) {
+        keys.release (e.target.dataset.keyValue);
+    });
+}
+
 /*
  * INIT Phase
  */
