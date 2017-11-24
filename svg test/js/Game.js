@@ -187,7 +187,7 @@ function Game (gameElement, turnSpeed) {
             // check if a hunter exists here already!
             for (var i = 0; i < this.hunters.length; i++) {
                 var pos = this.hunters [i].position;
-                console.log (pos.row + "===" + y);
+                //console.log (pos.row + "===" + y);
                 if (pos.row === y) {
                     validStart = false;
                 }
