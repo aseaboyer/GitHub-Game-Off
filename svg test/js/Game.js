@@ -3,30 +3,12 @@ function Game (gameElement, turnSpeed) {
         now = Date.now (),
         scoreGUI = document.getElementById ("score-count");
     
-    obj.loadSVG = function (fileName) {
-        var request = new XMLHttpRequest();
-        request.open("GET", fileName);
-        request.setRequestHeader("Content-Type", "image/svg+xml");
-        request.addEventListener("load", function(event) {
-            var response = event.target.responseText;
-            console.log ("response!");
-            console.log (response);
-            
-            var doc = new DOMParser();
-            var xml = doc.parseFromString(response, "image/svg+xml");
-            var rect = xml.getElementById("rect3336");
-            rect.setAttribute("width", 1000);
-            var result = response.slice(0, response.indexOf("<svg"));
-            result += xml.documentElement.outerHTML;
-            var a = document.createElement("a");
-            a.download = "myImage.svg";
-            a.href = "data:image/svg+xml," + encodeURIComponent(result);
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            
-        });
-        request.send();
+    obj.state = {
+        current: "start",
+        change: function (newState) {
+            this.current = newState;
+            document.body.dataset.gameState = newState;
+        }
     };
     
     obj.sounds = new SoundController ();
@@ -35,23 +17,58 @@ function Game (gameElement, turnSpeed) {
     obj.gameElement = gameElement;
     obj.scoreDisplay = document.getElementById ("score-count");
     
-    obj.findHunterTarget = function (rowNum) {
-        // check player
-        if (player.position.y === rowNum) {
+    obj.killHunterTarget = function (prey, rowNum) {
+        if (prey != null && prey.type !== "none") {
+            console.log ("The hunter in row " + rowNum + " shot it's prey!");
+            console.log (prey);
             
+            if (prey.type == "player") {
+                console.log ("The player loses a life!");
+                player.health.remove ();
+                
+            } else if (prey.type == "rabbit") {
+                console.log ("Remove a rabbit!");
+                this.rabbits.removeRabbitById (prey.id);
+            }
+        }
+    }
+    obj.findHunterTarget = function (rowNum) {
+        var returned = {
+            found: false,
+            type: "none",
+            object: null,
+            row: -1
+        };
+        
+        // check player
+        if (player.position.x === rowNum) {
+            returned = {
+                found: true,
+                type: "player",
+                object: player,
+                row: player.position.y
+            };
         }
         
         // check all rabbits 
         for (var i = 0; i < this.rabbits.rabbits.length; i++) {
-            if (this.rabbits.rabbits [i].position.y === rowNum) {
-                return true;
+            if (this.rabbits.rabbits [i].position.x === rowNum
+                && returned.row < this.rabbits.rabbits [i].position.y) {
+                returned = {
+                    found: true,
+                    type: "rabbit",
+                    object: this.rabbits.rabbits [i],
+                    row: this.rabbits.rabbits [i].position.y,
+                    id: i
+                };
             }
         }
         
-        return false; // fail out
+        return returned;
     };
     
     obj.init = function () {
+        this.state.change ("start");
         this.turn.current = 0;
         
         this.rabbits.buildTiles ("rabbit-tile");
@@ -61,22 +78,26 @@ function Game (gameElement, turnSpeed) {
         this.rabbits.init (0);
         this.whiskey.init (0);
         this.hunters.init (0);
+        
+        player.init ();
     };
     obj.update = function () {
-        this.turn.update ();
-        this.rabbits.update (this.turn.current);
-        this.whiskey.update (this.turn.current);
-        this.hunters.update (this.turn.current);
-        
-        // if the bottle is in play
-        if (this.whiskey.bottle !== null) {
-            if (player.position.x === this.whiskey.bottle.position.x &&
-                player.position.y === this.whiskey.bottle.position.y) {
-                // compare bear and bottle positions
-                //console.log ("Bear on bottle!");
-                this.whiskey.removeBottle (this.turn.current);
+        //if (this.state.current == "playing") {
+            this.turn.update ();
+            this.rabbits.update (this.turn.current);
+            this.whiskey.update (this.turn.current);
+            this.hunters.update (this.turn.current);
+
+            // if the bottle is in play
+            if (this.whiskey.bottle !== null) {
+                if (player.position.x === this.whiskey.bottle.position.x &&
+                    player.position.y === this.whiskey.bottle.position.y) {
+                    // compare bear and bottle positions
+                    //console.log ("Bear on bottle!");
+                    this.whiskey.removeBottle (this.turn.current);
+                }
             }
-        }
+        //}
     };
     
     obj.turn = {
@@ -165,13 +186,16 @@ function Game (gameElement, turnSpeed) {
             this.scheduleNext (0);
         },
         update: function (turnNumber) {
+            // update the hunters
+            for (var i = 0; i < this.hunters.length; i++) {
+                this.hunters [i].update ();
+            }
+            
+            // spawn a new hunter if it's time
             if (turnNumber >= this.nextSpawn &&
                this.hunters.length < this.data.maxCount) {
                 var newHunter = this.spawn ();
-                //console.log (this.hunters.length < this.data.maxCount);
-                //console.log (this.hunters.length + " < " + this.data.maxCount);
-                console.log (newHunter);
-                
+                //console.log (newHunter);
                 if (newHunter != null) {
                     this.scheduleNext (turnNumber);
                     this.hunters.push (newHunter);
@@ -203,9 +227,12 @@ function Game (gameElement, turnSpeed) {
         },
         removeAll: function (turnNumber) {
             for (var i = 0; i < this.hunters.length; i++) {
-                this.hunters [i].perish ();
                 game.scorePoints ("hunter");
+                
+                this.hunters [i].perish ();
             }
+            this.hunters.length = 0;
+            this.scheduleNext (turnNumber);
         },
         scheduleNext: function (turnNumber) {
             this.nextSpawn = turnNumber + this.data.frequency;
@@ -284,7 +311,12 @@ function Game (gameElement, turnSpeed) {
             return null;
         },
         update: function (turnNumber) {
-            //console.log (turnNumber);
+            //update the rabbits
+            for (var i = 0; i < this.rabbits.length; i++) {
+                this.rabbits [i].update ();
+            }
+            
+            // spawn a new rabbit if it's time
             if (turnNumber >= this.nextSpawn &&
                this.rabbits.length < this.data.maxCount) {
                 var newRabbit = this.spawn ();
@@ -348,11 +380,11 @@ function Game (gameElement, turnSpeed) {
         scheduleNext: function (turnNumber) {
             this.nextSpawn = turnNumber + this.data.frequency;
         },
-        removeBottle: function (turn) {
+        removeBottle: function (turnNumber) {
             this.bottle.perish ();
             this.bottle = null;
-            this.nextSpawn = turn + this.data.frequency;
-            game.hunters.removeAll ();
+            this.nextSpawn = turnNumber + this.data.frequency;
+            game.hunters.removeAll (turnNumber);
             console.log ("RAWR!!!")
         },
         buildTiles: function (className) {
@@ -406,7 +438,7 @@ function Game (gameElement, turnSpeed) {
             }
         },
         spawn: function () {
-            var start = randomInt (0, this.tiles.length);
+            var start = randomInt (0, this.tiles.length-1);
             var tile = this.tiles [start];
             var x = tile.position.x,
                 y = tile.position.y,
@@ -438,6 +470,32 @@ function Game (gameElement, turnSpeed) {
             // invalid - don't create
             return null;
         },
+    };
+    
+    obj.loadSVG = function (fileName) {
+        var request = new XMLHttpRequest();
+        request.open("GET", fileName);
+        request.setRequestHeader("Content-Type", "image/svg+xml");
+        request.addEventListener("load", function(event) {
+            var response = event.target.responseText;
+            console.log ("response!");
+            console.log (response);
+            
+            var doc = new DOMParser();
+            var xml = doc.parseFromString(response, "image/svg+xml");
+            var rect = xml.getElementById("rect3336");
+            rect.setAttribute("width", 1000);
+            var result = response.slice(0, response.indexOf("<svg"));
+            result += xml.documentElement.outerHTML;
+            var a = document.createElement("a");
+            a.download = "myImage.svg";
+            a.href = "data:image/svg+xml," + encodeURIComponent(result);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+        });
+        request.send();
     };
     
     return obj;

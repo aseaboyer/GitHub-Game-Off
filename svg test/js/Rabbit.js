@@ -1,8 +1,6 @@
 function Rabbit (xStart, yStart) {
     var obj = {};
     
-    obj.data = gameData.bear;
-    
     obj.position = {
         x: xStart,
         y: yStart,
@@ -30,6 +28,9 @@ function Rabbit (xStart, yStart) {
             tile.changeState ("active");
             
             // highlight next tile
+            this.findNext ();
+        },
+        findNext: function () {
             
         }
     };

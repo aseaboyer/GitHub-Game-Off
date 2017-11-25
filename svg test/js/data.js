@@ -3,7 +3,8 @@ var gameData = {
         startPosition: {
             x: 3,
             y: 2
-        }
+        },
+        startingHealth: 3
     },
     rabbits: {
         frequency: 8,

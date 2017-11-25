@@ -37,7 +37,7 @@ for (var i = 0; i < dbuttons.length; i++) {
     keys = new Keyring ();
     player = new Player ();
     game.init ();
-    player.init ();
+    //player.init ();
     
     //game.loadSVG ("scene.svg");
     

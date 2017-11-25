@@ -42,26 +42,11 @@ h1 {
     top:50%;
     width:200px;
 }
-#healthWrapper {
-    background-color:#666;
-    height:4px;
-    left:50%;
-    margin:-100px;
-    margin-top:106px;
-    position:absolute;
-    text-align:right;
-    top:50%;
-    width:100px;
-}
-#healthBar {
-    background-color:rgba(24,221,0,1);
-    height:100%;
-    transition:width 300ms;
-    width:0%;
-}
 
 #UI #inGame {
     background-color:transparent;
+    display:flex;
+    flex-wrap:nowrap;
     height:400px;
     left:50%;
     margin:-200px -300px;
@@ -72,18 +57,44 @@ h1 {
 }
 
 #time {
-    position:absolute;
-    left:20px;
-    text-align:left;
-    top:20px;
-    width:200px;
+    padding-top:20px;
+    text-align:right;
+    width:25%;
+}
+#gameOverState {
+    color: rgba(0,0,0,0);
+    padding-top:20px;
+    text-align:center;
+    width:25%;
+}
+body[data-player-health="0"] #gameOverState {
+    color:rgba(0,0,0,1);
+}
+#health {
+    padding-top:20px;
+    text-align:center;
+    width:25%;
+}
+#health > span {
+    color:rgba(0,0,0,0);
+    display:inline-block;
+}
+body[data-player-health="1"] #health1,
+body[data-player-health="2"] #health1,
+body[data-player-health="3"] #health1 {
+    color:rgba(0,0,0,1);
+}
+body[data-player-health="2"] #health2,
+body[data-player-health="3"] #health2 {
+    color:rgba(0,0,0,1);
+}
+body[data-player-health="3"] #health3 {
+    color:rgba(0,0,0,1);
 }
 #score {
-    position:absolute;
-    right:20px;
-    text-align:right;
-    top:20px;
-    width:200px;
+    padding-top:20px;
+    text-align:left;
+    width:25%;
 }
 
 #killScreen {
@@ -290,7 +301,4 @@ footer p a {
 }
 .whiskey-tile[data-state="inactive"] {
     fill: rgba(0,0,0,0.01) !important;
-}
-.whiskey-tile[data-state="nextTarget"] {
-    fill: rgba(0,0,0,0.03) !important;
 }
