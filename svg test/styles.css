@@ -172,7 +172,7 @@ body.instructionsOpen #instructions {
 
 #dPad {
     background-color:gray;
-    border:30px solid gray;
+    border:40px solid gray;
     border-radius:10px;
     bottom:calc(50% - 150px);
     height:10px;
@@ -192,52 +192,50 @@ body.instructionsOpen #instructions {
     border-radius:2px;
     color:transparent;
     content:" ";
-    height:70px;
-    left:-10px;
+    height:90px;
+    left:-15px;
     position:absolute;
-    top:-30px;
-    width:30px;
+    top:-40px;
+    width:40px;
 }
 #dPad ul::after {
     background-color:darkslategray;
     border-radius:2px;
     color:transparent;
     content:" ";
-    height:30px;
-    left:-30px;
+    height:40px;
+    left:-40px;
     position:absolute;
-    top:-10px;
-    width:70px;
-}
-#dPad li {
+    top:-15px;
+    width:90px;
 }
 #dPad button {
     background-color:rgba(0,0,0,0.5);
     border-radius:50%;
-    height:20px;
+    height:25px;
     list-style-type:none;
     margin:0;
     padding:0;
     position:absolute;
     transition:background-color 200ms;
-    width:20px;
+    width:25px;
     z-index:10;
 }
 #dpad-up {
-    top:-28px;
-    left:-5px;
+    top:-38px;
+    left:-7px;
 }
 #dpad-right {
-    right:-28px;
-    top:-5px;
+    right:-38px;
+    top:-7px;
 }
 #dpad-down {
-    bottom:-38px;
-    left:-5px;
+    bottom:-48px;
+    left:-7px;
 }
 #dpad-left {
-    left:-28px;
-    top:-5px;
+    left:-38px;
+    top:-7px;
 }
 body[data-key-pressed="up"] #dpad-up {
     background-color:rgba(0,0,0,1);
