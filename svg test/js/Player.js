@@ -21,6 +21,10 @@ function Player () {
         }
     };
     
+    obj.delay = {
+        
+    };
+    
     obj.health = {
         current: 0,
         set: function (newVal) {
@@ -29,6 +33,7 @@ function Player () {
             
             if (this.current <= 0) {
                 this.current = 0;
+                game.sounds.request ("loss");
                 game.state.change ("loss");
             }
             

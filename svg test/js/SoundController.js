@@ -2,7 +2,7 @@ function SoundController () {
     var obj = {},
         now = Date.now ();
     
-    var list = gameData.sounds;
+    obj.list = gameData.sounds;
     
     obj.on = true;
     obj.toggle = function () {
@@ -17,18 +17,18 @@ function SoundController () {
         }
         return null;
     },
-    obj.addRequest = function (soundName) {
+    obj.request = function (soundName) {
         var turn = game.turn.current,
             foundClip = this.findClip (soundName);
         
         if (foundClip != null) {
             foundClip.turn = turn;
             
-            if (nextPlay === null || turn > this.nextPlay.turn) {
+            if (this.nextPlay === null || turn > this.nextPlay.turn) {
                 this.nextPlay = foundClip;
                 
             } else {
-                // compare turn and priorities before adding
+                // compare priorities before adding
                 if (foundClip.priority > this.nextPlay.priority) {
                     this.nextPlay = foundClip;
                 }
@@ -36,18 +36,18 @@ function SoundController () {
             
         } else {
             // audio entry not found
-            debug.log ("Can't find audio: " + soundName);
+            console.log ("Can't find audio: " + soundName);
         }
     };
     
     obj.update = function (turnNumber) {
         if (this.nextPlay != null && this.on) {
-            console.log (this.nextPlay.file);
-            /*var snd = new Audio(this.nextPlay.file);
-            snd.play();*/
-            
-            this.nextPlay = null;
+            //console.log (this.nextPlay.file);
+            var snd = new Audio(this.nextPlay.file);
+            snd.play();
         }
+
+        this.nextPlay = null;
     };
     
     return obj;

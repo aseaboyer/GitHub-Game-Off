@@ -25,10 +25,12 @@ function Game (gameElement, turnSpeed) {
             if (prey.type == "player") {
                 //console.log ("The player loses a life!");
                 player.health.remove ();
+                game.sounds.request ("playerShot");
                 
             } else if (prey.type == "rabbit") {
                 //console.log ("Remove a rabbit!");
                 this.rabbits.removeRabbitById (prey.id);
+                game.sounds.request ("rabbitShot");
             }
         }
     }
@@ -72,7 +74,10 @@ function Game (gameElement, turnSpeed) {
         this.turn.current = 0;
     };
     obj.update = function () {
-        if (this.state.current == "playing") {
+        if (this.turn.delay) {
+            console.log ("Game is delayed.");
+            
+        } else if (this.state.current == "playing") {
             this.turn.update ();
             player.update (this.turn.current);
             this.rabbits.update (this.turn.current);
@@ -84,10 +89,12 @@ function Game (gameElement, turnSpeed) {
                 if (player.position.x === this.whiskey.bottle.position.x &&
                     player.position.y === this.whiskey.bottle.position.y) {
                     // compare bear and bottle positions
-                    //console.log ("Bear on bottle!");
+                    this.sounds.request ("drinkWhiskey");
                     this.whiskey.removeBottle (this.turn.current);
                 }
             }
+
+            this.sounds.update (this.turn.current);
         }
     };
     obj.start = function () { this.restart (); };
@@ -104,6 +111,7 @@ function Game (gameElement, turnSpeed) {
         this.points.reset ();
         
         this.state.change ("playing");
+        this.sounds.request ("start");
     };
     
     obj.turn = {
@@ -134,6 +142,13 @@ function Game (gameElement, turnSpeed) {
         increase: function () {
             this.current++;
             player.move ();
+        },
+        delay: false,
+        startDelay: function () {
+            
+        },
+        cancelDelay: function () {
+            
         }
     };
     
@@ -209,6 +224,7 @@ function Game (gameElement, turnSpeed) {
                 if (newHunter != null) {
                     this.scheduleNext (turnNumber);
                     this.hunters.push (newHunter);
+                    game.sounds.request ("hunterSpawn");
                 }
             }
         },
@@ -341,6 +357,7 @@ function Game (gameElement, turnSpeed) {
                     if (startTile !== null) {
                         this.rabbits.push (newRabbit);
                         newRabbit.init (startTile);
+                        game.sounds.request ("rabbitSpawn");
                     } else {
                         console.log ("Couldn't find the rabbit's tile");
                         console.log (newRabbit.position);
