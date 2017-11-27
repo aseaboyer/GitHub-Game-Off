@@ -7,6 +7,11 @@ function Tile (type, tile) {
     obj.changeState = function (newState) {
         this.state = newState;
         this.object.dataset.state = newState;
+        /*console.log ("Change State: " + 
+            this.type + " (" +
+            this.position.x + ", " +
+            this.position.y + ") " + 
+            newState + ":" + this.state);*/
     }
     obj.position = {
         x: parseInt (tile.getAttribute ("xpos")),

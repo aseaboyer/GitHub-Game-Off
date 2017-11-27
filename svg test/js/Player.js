@@ -10,6 +10,16 @@ function Player () {
         
         this.health.set (gameData.bear.startingHealth);
     };
+    obj.update = function (turnNumber) {
+        // check for rabbits
+        var rabbitOnTile = game.rabbits.findRabbitId (
+            this.position.x, this.position.y);
+        if (rabbitOnTile != null) {
+            //console.log ("Found a rabbit! @ " + rabbitOnTile);
+            game.rabbits.removeRabbitById (rabbitOnTile);
+            game.scorePoints ("rabbit");
+        }
+    };
     
     obj.health = {
         current: 0,
@@ -17,9 +27,8 @@ function Player () {
             this.current = newVal;
             document.body.dataset.playerHealth = this.current;
             
-            if (this.curent <= 0) {
-                this.curent = 0;
-                console.log ("Game Over!");
+            if (this.current <= 0) {
+                this.current = 0;
                 game.state.change ("loss");
             }
             
@@ -75,21 +84,6 @@ function Player () {
                     }
                 
                 }
-                
-                // check for rabbits
-                var rabbitOnTile = game.rabbits.findRabbitId (this.x, this.y);
-                if (rabbitOnTile != null) {
-                    //console.log ("Found a rabbit! @ " + rabbitOnTile);
-                    game.rabbits.removeRabbitById (rabbitOnTile);
-                    game.scorePoints ("rabbit");
-                }
-                
-                // check for whiskey
-                /*
-                var whiskeyOnTile = game.whiskey.atLocation (this.x, this.y);
-                if (whiskeyOnTile) {
-                    game.whiskey.removeBottle ();
-                }*/
             }
         },
         tiles: [],

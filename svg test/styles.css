@@ -16,6 +16,29 @@ h1 {
     width:170px;
     z-index:8;
 }
+h2 {
+    color:#a0be94;
+    margin:0.75em;
+}
+
+button {
+    background-color:#a0be94;
+    border-radius:0;
+    border-width:0;
+    color:#000;
+    cursor:pointer;
+    display:block;
+    font-weight:bold;
+    margin:0 auto 0.75em auto;
+    padding:5px 20px;
+}
+button:hover {
+    text-decoration:underline;
+}
+
+.dialog {
+    border-radius:5px;
+}
 
 #gameWrapper {
     background-color:#000;
@@ -29,18 +52,6 @@ h1 {
 
 #gameWrapper canvas {
     
-}
-
-#coins {
-    color:rgba(24,221,0,1);
-    height:50px;
-    left:50%;
-    margin:-100px;
-    margin-top:100px;
-    position:absolute;
-    text-align:right;
-    top:50%;
-    width:200px;
 }
 
 #UI #inGame {
@@ -62,7 +73,7 @@ h1 {
     width:25%;
 }
 #gameOverState {
-    color: rgba(0,0,0,0);
+    color: rgba(0,0,0,0.03);
     padding-top:20px;
     text-align:center;
     width:25%;
@@ -76,7 +87,7 @@ body[data-player-health="0"] #gameOverState {
     width:25%;
 }
 #health > span {
-    color:rgba(0,0,0,0);
+    color:rgba(0,0,0,0.03);
     display:inline-block;
 }
 body[data-player-health="1"] #health1,
@@ -99,7 +110,23 @@ body[data-player-health="3"] #health3 {
 
 #killScreen {
     background-color:#333;
-    color: rgba(24,221,0,1);
+    height:0;
+    left:50%;
+    margin:-100px;
+    margin-top:-50px;
+    overflow:hidden;
+    position: absolute;
+    text-align: center;
+    transition:height 300ms;
+    top:50%;
+    width:200px;
+}
+body[data-game-state="loss"] #killScreen {
+    height: 100px;
+}
+
+#startScreen {
+    background-color:#333;
     height:0;
     left: 50%;
     margin: -100px;
@@ -109,22 +136,38 @@ body[data-player-health="3"] #health3 {
     text-align: center;
     transition:height 300ms;
     top: 50%;
-    width: 200px;
+    width:240px;
 }
-#killScreen button {
-    background-color:rgba(47,181,243,1);
-    border-radius:0;
-    border-width:0;
-    color:#000;
-    cursor:pointer;
-    font-weight: bold;
-    padding: 5px 20px;
+body[data-game-state="start"] #startScreen {
+    height:130px;
 }
-#killScreen button:hover {
-    text-decoration:underline;
+
+#instructions {
+    background-color:#333;
+    height:0;
+    left: 50%;
+    margin-top:-150px;
+    margin-left:-200px;
+    overflow:hidden;
+    position: absolute;
+    text-align: center;
+    transition:height 300ms;
+    top:50%;
+    width:400px;
 }
-body[data-kill-screen="true"] #killScreen {
-    height: 100px;
+body[data-game-state="instructions"] #instructions,
+body.instructionsOpen #instructions {
+    height:300px;
+}
+#instructions ul {
+    margin:0 1em 2em 1em;
+    padding:0 0 0 1em;
+    text-align:left;
+}
+#instructions li {
+    color:#a0be94;
+    margin-bottom:0.5em;
+    text-align:left;
 }
 
 #dPad {
@@ -138,19 +181,6 @@ body[data-kill-screen="true"] #killScreen {
     width:10px;
     z-index:8;
 }
-/*body[data-key-pressed="up"] #dPad {
-    border-top-color:rgba(47,181,243,1);
-}
-body[data-key-pressed="right"] #dPad {
-    border-right-color:rgba(47,181,243,1);
-}
-body[data-key-pressed="down"] #dPad {
-    border-bottom-color:rgba(47,181,243,1);
-}
-body[data-key-pressed="left"] #dPad {
-    border-left-color:rgba(47,181,243,1);
-}*/
-
 #dPad ul {
     list-style-type:none;
     margin:0;
@@ -220,6 +250,28 @@ body[data-key-pressed="left"] #dpad-left {
     background-color:rgba(0,0,0,1);
 }
 
+#physicalButtons {
+    border-radius:10px;
+    bottom:calc(50% - 150px);
+    height:70px;
+    left:calc(50% + 320px);
+    padding:10px;
+    position:absolute;
+    text-align:left;
+    width:150px;
+    z-index:8;
+}
+#physicalButtons button {
+    border-radius:3px;
+    margin-left:0;
+}
+#gameStartButton {
+    
+}
+#sfxButton {
+    
+}
+
 footer {
     bottom:0;
     margin:0;
@@ -232,8 +284,8 @@ footer p {
     padding:5px;
 }
 footer p a {
-    color:aquamarine;
-    color:rgba(47,181,243,1);
+    color:black;
+    /*color:rgba(47,181,243,1);*/
 }
 
 
@@ -242,63 +294,63 @@ footer p a {
  */
 /*** Bear States ***/
 .bear-tile {
-    fill: rgba(0,0,0,0.01) !important;
+    fill: rgba(0,0,0,0.01);
     transition:fill 200ms ease;
 }
 .bear-tile[data-state="active"] {
-    fill: rgba(0,0,0,0.99) !important;
+    fill: rgba(0,0,0,0.99);
 }
 .bear-tile[data-state="inactive"] {
-    fill: rgba(0,0,0,0.01) !important;
+    fill: rgba(0,0,0,0.01);
 }
 .bear-tile[data-state="highlight"] {
-    fill: rgba(0,0,0,0.03) !important;
+    fill: rgba(0,0,0,0.03);
 }
 /*** Rabbit States ***/
 .rabbit-tile {
-    fill: rgba(0,0,0,0.01) !important;
+    fill: rgba(0,0,0,0.01);
     transition:fill 200ms ease;
 }
 .rabbit-tile[data-state="active"] {
-    fill: rgba(0,0,0,0.99) !important;
+    fill: rgba(0,0,0,0.99);
 }
 .rabbit-tile[data-state="inactive"] {
-    fill: rgba(0,0,0,0.01) !important;
+    fill: rgba(0,0,0,0.01);
 }
 .rabbit-tile[data-state="nextTarget"] {
-    fill: rgba(0,0,0,0.03) !important;
+    fill: rgba(0,0,0,0.03);
 }
 /*** Hunter States ***/
 .hunter-tile {
-    fill: rgba(0,0,0,0.01) !important;
+    fill: rgba(0,0,0,0.01);
     transition:fill 200ms ease;
 }
 .hunter-tile[data-state="active"] path,
 .hunter-tile[data-state="active"] circle {
-    fill: rgba(0,0,0,0.99) !important;
+    fill: rgba(0,0,0,0.99);
 }
 .hunter-tile[data-state="active"] .crosshairs-inner {
-    fill: rgba(0,0,0,0.03) !important;
+    fill: rgba(0,0,0,0.03);
 }
 .hunter-tile[data-state="active"].aiming .crosshairs-inner {
-    fill: rgba(0,0,0,0.99) !important;
+    fill: rgba(0,0,0,0.99);
 }
 .hunter-tile[data-state="inactive"] path,
 .hunter-tile[data-state="inactive"] circle {
-    fill: rgba(0,0,0,0.01) !important;
+    fill: rgba(0,0,0,0.01);
 }
 .hunter-tile[data-state="nextTarget"] path,
 .hunter-tile[data-state="nextTarget"] circle {
-    fill: rgba(0,0,0,0.03) !important;
+    fill: rgba(0,0,0,0.03);
 }
 /*** Whiskey States ***/
 .whiskey-tile {
-    fill: rgba(0,0,0,0.01) !important;
+    fill: rgba(0,0,0,0.01);
     transition:fill 200ms ease;
 }
 .whiskey-tile[data-state="active"] {
-    fill: rgba(0,0,0,0.99) !important;
+    fill: rgba(0,0,0,0.99);
 }
 .whiskey-tile[data-state="inactive"] {
-    fill: rgba(0,0,0,0.01) !important;
+    fill: rgba(0,0,0,0.01);
 }

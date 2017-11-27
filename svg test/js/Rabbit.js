@@ -4,6 +4,7 @@ function Rabbit (xStart, yStart) {
     obj.position = {
         x: xStart,
         y: yStart,
+        skipTurn: true,
         tileId: {},
         next: {
             x: xStart,
@@ -28,28 +29,82 @@ function Rabbit (xStart, yStart) {
             tile.changeState ("active");
             
             // highlight next tile
-            this.findNext ();
+            var nextPos = this.findNext ();
+            
+            this.nextTile = nextPos;
+            this.next.x = nextPos.position.x;
+            this.next.y = nextPos.position.y;
+            // highligh next place
+            nextPos.changeState ("nextTarget");
+            
+            //console.log (this);
         },
         findNext: function () {
+            var potentialPositions = new Array (),
+                validTiles = new Array ();
             
+            // up
+            potentialPositions.push ({
+                x: this.x,
+                y: this.y - 1
+            });
+            // left
+            potentialPositions.push ({
+                x: this.x - 1,
+                y: this.y
+            });
+            // right
+            potentialPositions.push ({
+                x: this.x + 1,
+                y: this.y
+            });
+            // down
+            potentialPositions.push ({
+                x: this.x,
+                y: this.y + 1
+            });
+            
+            for (var i = 0; i < potentialPositions.length; i++) {
+                // validate those positions
+                var tile = game.rabbits.findTile (
+                    potentialPositions [i].x,
+                    potentialPositions [i].y
+                );
+                if (tile != null &&
+                    player.position.x != potentialPositions.x && 
+                    player.position.y != potentialPositions.y ) {
+                    validTiles.push (tile);
+                }
+            }
+            
+            var start = randomInt (0, validTiles.length-1);
+            
+            return validTiles [start];
+        },
+        move: function () {
+            this.set (this.nextTile);
         }
     };
     
     obj.perish = function () {
-        // deactivate new tile
+        // deactivate tile and next tile
         this.position.tile.changeState ("inactive");
+        this.position.nextTile.changeState ("inactive");
+        
+        //console.log (this.position.tile);
     };
     
     obj.init = function (tile) {
-        //console.log (tile);
-        //console.log ("Set this tile to active and all that!");
         this.position.tile = tile;
         this.position.set (tile);
     };
     obj.update = function () {
-        
-        // Update rabbit movement
-        
+        var skipTurn = Math.random ();
+        // 50% chance to skip a turn
+        if (skipTurn <= 0.5) {
+            // Update rabbit movement
+            this.position.move ();
+        }
     };
     
     return obj;

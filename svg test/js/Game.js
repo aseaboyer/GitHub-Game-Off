@@ -19,15 +19,15 @@ function Game (gameElement, turnSpeed) {
     
     obj.killHunterTarget = function (prey, rowNum) {
         if (prey != null && prey.type !== "none") {
-            console.log ("The hunter in row " + rowNum + " shot it's prey!");
-            console.log (prey);
+            //console.log ("The hunter in row " + rowNum + " shot it's prey!");
+            //console.log (prey);
             
             if (prey.type == "player") {
-                console.log ("The player loses a life!");
+                //console.log ("The player loses a life!");
                 player.health.remove ();
                 
             } else if (prey.type == "rabbit") {
-                console.log ("Remove a rabbit!");
+                //console.log ("Remove a rabbit!");
                 this.rabbits.removeRabbitById (prey.id);
             }
         }
@@ -70,20 +70,11 @@ function Game (gameElement, turnSpeed) {
     obj.init = function () {
         this.state.change ("start");
         this.turn.current = 0;
-        
-        this.rabbits.buildTiles ("rabbit-tile");
-        this.whiskey.buildTiles ("whiskey-tile");
-        this.hunters.buildTiles ("hunter-tile");
-        
-        this.rabbits.init (0);
-        this.whiskey.init (0);
-        this.hunters.init (0);
-        
-        player.init ();
     };
     obj.update = function () {
-        //if (this.state.current == "playing") {
+        if (this.state.current == "playing") {
             this.turn.update ();
+            player.update (this.turn.current);
             this.rabbits.update (this.turn.current);
             this.whiskey.update (this.turn.current);
             this.hunters.update (this.turn.current);
@@ -97,7 +88,22 @@ function Game (gameElement, turnSpeed) {
                     this.whiskey.removeBottle (this.turn.current);
                 }
             }
-        //}
+        }
+    };
+    obj.start = function () { this.restart (); };
+    obj.restart = function () {
+        this.rabbits.buildTiles ("rabbit-tile");
+        this.whiskey.buildTiles ("whiskey-tile");
+        this.hunters.buildTiles ("hunter-tile");
+        
+        this.rabbits.init (0);
+        this.whiskey.init (0);
+        this.hunters.init (0);
+        
+        player.init ();
+        this.points.reset ();
+        
+        this.state.change ("playing");
     };
     
     obj.turn = {
@@ -156,7 +162,7 @@ function Game (gameElement, turnSpeed) {
         current: 0,
         guiText: scoreGUI,
         pointValues: gameData.points,
-        score: function (type, ) {
+        score: function (type) {
             // find the value
             var pointObj = null;
             // console.log ("Trying to score pts for: " + type);
@@ -168,7 +174,11 @@ function Game (gameElement, turnSpeed) {
             
             // update the value and field
             this.current += pointObj.value;
-            this.guiText.innerHTML = this.current
+            this.guiText.innerHTML = this.current;
+        },
+        reset: function () {
+            this.current = 0;
+            this.guiText.innerHTML = this.current;
         }
     };
     obj.scorePoints = function (type) {
@@ -188,7 +198,7 @@ function Game (gameElement, turnSpeed) {
         update: function (turnNumber) {
             // update the hunters
             for (var i = 0; i < this.hunters.length; i++) {
-                this.hunters [i].update ();
+                this.hunters [i].update (turnNumber);
             }
             
             // spawn a new hunter if it's time
@@ -274,16 +284,16 @@ function Game (gameElement, turnSpeed) {
             return null;
         },
         removeRabbitById: function (id) {
-            this.rabbits [id].perish ("bear");
+            this.rabbits [id].perish ();
             this.rabbits.splice (id, 1);
         },
-        removeRabbitAt: function (x, y) {
+        /*removeRabbitAt: function (x, y) {
             // RM?
             var tile = this.findTile (x,y);
             if (tile != null) {
                 this.removeRabbit (tile);
             }
-        },
+        },*/
         buildTiles: function (className) {
              var tiles = document.getElementsByClassName (className);
             this.tiles.length = 0;

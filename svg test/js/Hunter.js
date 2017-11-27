@@ -11,11 +11,11 @@ function Hunter (tile) {
         row: xStart // Row is all hunters need
     };
     
-    obj.update = function () {
+    obj.update = function (turn) {
         var validShot = game.findHunterTarget (this.position.row);
         //console.log ("Hunter aiming in " + this.position.row + " :: " + validShot);
         if (validShot.found) {
-            //console.log (validShot.found + " :: " + this.targetInSight);
+            //console.log (validShot.found + " :: " + this.targetInSight + " :: turn: " + turn);
             if (!this.targetInSight) {
                 // new target aquired
                 this.targetInSight = true;
