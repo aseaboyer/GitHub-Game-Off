@@ -210,6 +210,8 @@ body.instructionsOpen #instructions {
     width:70px;
 }
 #dPad li {
+}
+#dPad button {
     background-color:rgba(0,0,0,0.5);
     border-radius:50%;
     height:20px;
