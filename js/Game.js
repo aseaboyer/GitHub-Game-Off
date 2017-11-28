@@ -71,7 +71,7 @@ function Game (gameElement, turnSpeed) {
     
     obj.init = function () {
         this.state.change ("start");
-        this.turn.current = 0;
+        this.turn.init ();
     };
     obj.update = function () {
         if (this.turn.delay) {
@@ -109,6 +109,7 @@ function Game (gameElement, turnSpeed) {
         
         player.init ();
         this.points.reset ();
+        this.turn.init ();
         
         this.state.change ("playing");
         this.sounds.request ("start");
@@ -119,6 +120,10 @@ function Game (gameElement, turnSpeed) {
         speed: turnSpeed,
         last: now,
         newTurn: false,
+        init: function () {
+            this.current = 0;
+            this.last = Date.now ();
+        },
         update: function () {
             var now = Date.now ();
             //console.log (now >= this.last + this.speed);
@@ -177,6 +182,25 @@ function Game (gameElement, turnSpeed) {
         current: 0,
         guiText: scoreGUI,
         pointValues: gameData.points,
+        highScore: {
+            value: 0,
+            get: function () {
+                var hs = localStorage.getItem("whiskeyBearHighScore");
+                if (hs !== null) {
+                    return hs;
+                }
+                return 0;
+            },
+            set: function (score) {
+                localStorage.setItem('whiskeyBearHighScore', score);
+            },
+            save: function (newScore) {
+                var highScore = this.get ();
+                if (newScore > highScore) {
+                    this.set (newScore);
+                }
+            }
+        },
         score: function (type) {
             // find the value
             var pointObj = null;
@@ -208,6 +232,7 @@ function Game (gameElement, turnSpeed) {
         lastHunter: 0, // turn count
         nextSpawn: 0, // turn count
         init: function (turnNumber) {
+            this.hunters.length = 0;
             this.scheduleNext (0);
         },
         update: function (turnNumber) {
@@ -284,6 +309,7 @@ function Game (gameElement, turnSpeed) {
         lastRabbit: 0, // turn count
         nextSpawn: 0, // turn count
         init: function (turnNumber) {
+            this.rabbits.length = 0;
             this.scheduleNext (0);
         },
         scheduleNext: function (turnNumber) {
@@ -300,6 +326,8 @@ function Game (gameElement, turnSpeed) {
             return null;
         },
         removeRabbitById: function (id) {
+            //console.log ("--- id");
+            //console.log (id);
             this.rabbits [id].perish ();
             this.rabbits.splice (id, 1);
         },
@@ -402,6 +430,7 @@ function Game (gameElement, turnSpeed) {
         lastBottle: 0, // turn count
         nextSpawn: 0, // turn count
         init: function (turnNumber) {
+            this.bottle = null;
             this.scheduleNext (0);
         },
         scheduleNext: function (turnNumber) {

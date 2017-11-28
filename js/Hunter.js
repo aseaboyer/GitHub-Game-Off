@@ -23,7 +23,8 @@ function Hunter (tile) {
 
             } else {
                 // shoot target
-
+                //console.log ("Hunter aiming in " + this.position.row + " :: " + validShot);
+                //console.log (validShot);
                 this.takeShot (validShot);
             }
             

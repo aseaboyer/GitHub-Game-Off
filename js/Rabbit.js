@@ -4,20 +4,22 @@ function Rabbit (xStart, yStart) {
     obj.position = {
         x: xStart,
         y: yStart,
-        skipTurn: true,
-        tileId: {},
+        tile: {},
+        /*skipTurn: true,
+        tileId: {},*/
         next: {
             x: xStart,
             y: yStart,
-            tileId: {}
+            tile: {}
+            /*tileId: {}*/
         },
-        tile: 0,
         nextTile: 0,
         set: function (tile) {
-            var oldTile = game.rabbits.findTile (
+            /*var oldTile = game.rabbits.findTile (
                 this.x,
                 this.y
-            );
+            );*/
+            var oldTile = this.tile;
             // reset last tile
             if (oldTile != null) {
                 oldTile.changeState ("inactive");
@@ -25,6 +27,7 @@ function Rabbit (xStart, yStart) {
             
             this.x = tile.position.x;
             this.y = tile.position.y;
+            this.tile = tile;
             // activate new tile
             tile.changeState ("active");
             
@@ -36,8 +39,6 @@ function Rabbit (xStart, yStart) {
             this.next.y = nextPos.position.y;
             // highligh next place
             nextPos.changeState ("nextTarget");
-            
-            //console.log (this);
         },
         findNext: function () {
             var potentialPositions = new Array (),
@@ -86,12 +87,12 @@ function Rabbit (xStart, yStart) {
         }
     };
     
+    obj.dead = false;
     obj.perish = function () {
         // deactivate tile and next tile
         this.position.tile.changeState ("inactive");
         this.position.nextTile.changeState ("inactive");
-        
-        //console.log (this.position.tile);
+        this.dead = true;
     };
     
     obj.init = function (tile) {
@@ -99,11 +100,13 @@ function Rabbit (xStart, yStart) {
         this.position.set (tile);
     };
     obj.update = function () {
-        var skipTurn = Math.random ();
-        // 50% chance to skip a turn
-        if (skipTurn <= 0.5) {
-            // Update rabbit movement
-            this.position.move ();
+        if (!this.dead) {
+            var skipTurn = Math.random ();
+            // 50% chance to skip a turn
+            if (skipTurn <= 0.5) {
+                // Update rabbit movement
+                this.position.move ();
+            }
         }
     };
     

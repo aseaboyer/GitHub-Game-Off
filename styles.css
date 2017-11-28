@@ -40,6 +40,33 @@ button:hover {
     border-radius:5px;
 }
 
+@keyframes flickerAnimation {
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-o-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-moz-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-webkit-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+.flicker {
+   -webkit-animation: flickerAnimation 1s infinite;
+   -moz-animation: flickerAnimation 1s infinite;
+   -o-animation: flickerAnimation 1s infinite;
+    animation: flickerAnimation 1s infinite;
+}
+
 #gameWrapper {
     background-color:#000;
     height:400px;
@@ -78,8 +105,12 @@ button:hover {
     text-align:center;
     width:25%;
 }
-body[data-player-health="0"] #gameOverState {
+body[data-game-state="loss"] #gameOverState {
     color:rgba(0,0,0,1);
+    -webkit-animation: flickerAnimation 1s infinite;
+    -moz-animation: flickerAnimation 1s infinite;
+    -o-animation: flickerAnimation 1s infinite;
+    animation: flickerAnimation 1s infinite;
 }
 #health {
     padding-top:20px;
@@ -170,6 +201,7 @@ body.instructionsOpen #instructions {
     text-align:left;
 }
 
+/*
 #dPad {
     background-color:gray;
     border:40px solid gray;
@@ -208,9 +240,31 @@ body.instructionsOpen #instructions {
     position:absolute;
     top:-15px;
     width:90px;
+}*/
+#dPad {
+    background-color:gray;
+    border-radius:20px;
+    bottom:calc(50% - 150px);
+    height:90px;
+    right:calc(50% + 350px);
+    position:absolute;
+    width:90px;
+    z-index:8;
+}
+#dPad ul {
+    background-color:rgba(0,0,0,0.4);
+    border-radius:50%;
+    height:86px;
+    left:2px;
+    list-style-type:none;
+    margin:0;
+    padding:0;
+    position:relative;
+    top:2px;
+    width:86px;
 }
 #dPad button {
-    background-color:rgba(0,0,0,0.5);
+    background-color:rgba(0,0,0,1);
     border-radius:50%;
     height:25px;
     list-style-type:none;
@@ -222,20 +276,20 @@ body.instructionsOpen #instructions {
     z-index:10;
 }
 #dpad-up {
-    top:-38px;
-    left:-7px;
+    top:5px;
+    left:30px;
 }
 #dpad-right {
-    right:-38px;
-    top:-7px;
+    bottom:30px;
+    right:5px;
 }
 #dpad-down {
-    bottom:-48px;
-    left:-7px;
+    bottom:5px;
+    left:30px;
 }
 #dpad-left {
-    left:-38px;
-    top:-7px;
+    bottom:30px;
+    left:5px;
 }
 body[data-key-pressed="up"] #dpad-up {
     background-color:rgba(0,0,0,1);

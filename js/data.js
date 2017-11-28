@@ -8,7 +8,7 @@ var gameData = {
     },
     rabbits: {
         frequency: 8,
-        maxCount: 2,
+        maxCount: 1,
         chanceToMove: 0.5,
         startPositions: [
             {
