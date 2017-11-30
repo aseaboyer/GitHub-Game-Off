@@ -8,7 +8,7 @@ var gameData = {
     },
     rabbits: {
         frequency: 8,
-        maxCount: 1,
+        maxCount: 2,
         chanceToMove: 0.5,
         startPositions: [
             {
@@ -31,7 +31,7 @@ var gameData = {
     },
     hunters: {
         frequency: 15,
-        maxCount: 1
+        maxCount: 2
     },
     whiskey: {
         frequency: 25

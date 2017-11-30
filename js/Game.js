@@ -78,6 +78,10 @@ function Game (gameElement, turnSpeed) {
             console.log ("Game is delayed.");
             
         } else if (this.state.current == "playing") {
+            if (document.body.classList.contains ("bottlePickup")) {
+                document.body.classList.remove ("bottlePickup");
+            }
+            
             this.turn.update ();
             player.update (this.turn.current);
             this.rabbits.update (this.turn.current);
@@ -296,6 +300,7 @@ function Game (gameElement, turnSpeed) {
                 for (var i = 0; i < tiles.length; i++) {
                     var tile = tiles [i];
                     var newTile = new Tile ("hunter", tile);
+                    newTile.changeState ("inactive");
                     this.tiles.push (newTile);
                 }
             }
@@ -347,6 +352,7 @@ function Game (gameElement, turnSpeed) {
                 for (var i = 0; i < tiles.length; i++) {
                     var tile = tiles [i];
                     var newTile = new Tile ("rabbit", tile);
+                    newTile.changeState ("inactive");
                     this.tiles.push (newTile);
                 }
             }
@@ -441,7 +447,8 @@ function Game (gameElement, turnSpeed) {
             this.bottle = null;
             this.nextSpawn = turnNumber + this.data.frequency;
             game.hunters.removeAll (turnNumber);
-            console.log ("RAWR!!!")
+            console.log ("RAWR!!!");
+            document.body.classList.add ("bottlePickup");
         },
         buildTiles: function (className) {
              var tiles = document.getElementsByClassName (className);
@@ -452,6 +459,7 @@ function Game (gameElement, turnSpeed) {
                 for (var i = 0; i < tiles.length; i++) {
                     var tile = tiles [i];
                     var newTile = new Tile ("whiskey", tile);
+                    newTile.changeState ("inactive");
                     this.tiles.push (newTile);
                 }
             }

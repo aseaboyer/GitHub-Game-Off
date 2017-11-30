@@ -77,8 +77,16 @@ button:hover {
     width:600px;
 }
 
-#gameWrapper canvas {
-    
+#gameWrapper svg {
+    position:relative;
+    z-index:45;
+}
+
+#coverArt {
+    position:absolute;
+    right:-200px;
+    bottom:0;
+    z-index:0;
 }
 
 #UI #inGame {
@@ -185,6 +193,7 @@ body[data-game-state="start"] #startScreen {
     transition:height 300ms;
     top:50%;
     width:400px;
+    z-index:50;
 }
 body[data-game-state="instructions"] #instructions,
 body.instructionsOpen #instructions {
@@ -326,17 +335,27 @@ body[data-key-pressed="left"] #dpad-left {
 }
 
 footer {
+    background-color:lightgray;
     bottom:0;
+    height:30px;
     margin:0;
     padding:0;
-    position:absolute;
+    position:fixed;
     right:0;
+    width:100%;
 }
-footer p {
-    margin:5px;
-    padding:5px;
+footer #toggleInstructions {
+    display:inline;
+    float:left;
+    margin:-5px 5px;
 }
-footer p a {
+#author {
+    display:inline;
+    float:right;
+    margin:0;
+    padding:5px 10px;
+}
+footer a {
     color:black;
     /*color:rgba(47,181,243,1);*/
 }
@@ -358,6 +377,9 @@ footer p a {
 }
 .bear-tile[data-state="highlight"] {
     fill: rgba(0,0,0,0.03);
+}
+body.bottlePickup .bear-tile {
+    fill: rgba(0,0,0,0.5);
 }
 /*** Rabbit States ***/
 .rabbit-tile {
