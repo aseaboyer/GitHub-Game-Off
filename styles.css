@@ -335,6 +335,7 @@ body[data-key-pressed="left"] #dpad-left {
 }
 
 footer {
+    border-top: 3px solid darkgrey;
     background-color:lightgray;
     bottom:0;
     height:30px;
@@ -343,6 +344,7 @@ footer {
     position:fixed;
     right:0;
     width:100%;
+    z-index: 40;
 }
 footer #toggleInstructions {
     display:inline;
@@ -357,7 +359,6 @@ footer #toggleInstructions {
 }
 footer a {
     color:black;
-    /*color:rgba(47,181,243,1);*/
 }
 
 
